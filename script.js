@@ -15,6 +15,30 @@ class Game {
         // Fill background
         rect(0, 0, canvas.width, canvas.height);
 
+        // Fill grid - vertical
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+        for (let i=0; i<canvas.width / 20; i++) {
+            let x = i * 20;
+            let y = 0;
+            let s = canvas.height;
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y + s);
+        }
+        ctx.stroke();
+
+        // Fill grid - horizontal
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+        for (let i=0; i<canvas.height / 20; i++) {
+            let x = 0;
+            let y = i * 20;
+            let s = canvas.width;
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + s, y);
+        }
+        ctx.stroke();
+
         // Fill path
         ctx.beginPath();
         ctx.strokeStyle = "white";
