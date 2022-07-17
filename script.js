@@ -7,48 +7,58 @@ const rect = (x, y, w, h) => {
     ctx.fillRect(x, y, w, h);
 }
 
+const drawGrid = () => {
+    // Fill grid - vertical
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(200, 200, 200, 0.3)";
+    for (let i=0; i<canvas.width / 20; i++) {
+        let x = i * 20;
+        let y = 0;
+        let s = canvas.height;
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y + s);
+    }
+    ctx.stroke();
+
+    // Fill grid - horizontal
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(200, 200, 200, 0.3)";
+    for (let i=0; i<(canvas.height / 20) + 1; i++) {
+        let x = 0;
+        let y = (i * 20) - 10;
+        let s = canvas.width;
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + s, y);
+    }
+    ctx.stroke();
+}
+
+const drawPathways = pathways => {
+    // Fill pathways (NPC path)
+    pathways.forEach(pathway => {
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        for (let i=0; i<pathway.length-1; i++) {
+            let a = pathway[i];
+            let b = pathway[i+1];
+            console.log(a, b)
+            ctx.moveTo(a[0], a[1]);
+            ctx.lineTo(b[0], b[1]);
+        }
+        ctx.stroke();
+    });
+}
+
 class Game {
-    constructor(pathway) {
-        this.pathway = pathway;
+    constructor(pathways) {
+        this.pathways = pathways;
     }
     draw = () =>  {
         // Fill background
         rect(0, 0, canvas.width, canvas.height);
 
-        // Fill grid - vertical
-        ctx.beginPath();
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-        for (let i=0; i<canvas.width / 20; i++) {
-            let x = i * 20;
-            let y = 0;
-            let s = canvas.height;
-            ctx.moveTo(x, y);
-            ctx.lineTo(x, y + s);
-        }
-        ctx.stroke();
-
-        // Fill grid - horizontal
-        ctx.beginPath();
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-        for (let i=0; i<canvas.height / 20; i++) {
-            let x = 0;
-            let y = i * 20;
-            let s = canvas.width;
-            ctx.moveTo(x, y);
-            ctx.lineTo(x + s, y);
-        }
-        ctx.stroke();
-
-        // Fill path
-        ctx.beginPath();
-        ctx.strokeStyle = "white";
-        for (let i=0; i<this.pathway.length-1; i++) {
-            let a = this.pathway[i];
-            let b = this.pathway[i+1];
-            ctx.moveTo(a[0], a[1]);
-            ctx.lineTo(b[0], b[1]);
-        }
-        ctx.stroke();
+        drawPathways(this.pathways);        
+        drawGrid();
     }
     update = () => {
 
@@ -64,14 +74,18 @@ class Game {
 
 window.onload = () => {
     // Init game variables
-    game = new Game([
-        [0, 240],
-        [150, 240],
-        [150, 360],
-        [300, 360],
-        [300, 240],
-        [640, 240]
-    ]);
+    game = new Game(
+        [
+            [
+                [0, 240 - 10],
+                [640, 240 - 10]
+            ],
+            [
+                [0, 240 + 10],
+                [640, 240 + 10]
+            ]
+        ]
+    );
 
     // Init canvas variables
     canvas = $("canvas");
